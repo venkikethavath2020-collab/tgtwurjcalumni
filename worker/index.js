@@ -26,21 +26,57 @@ function cleanMetadata(value, fallback = '') {
 }
 
 function extension(file) {
-  const fromType = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic', 'image/heif': 'heif' };
+  const fromType = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/heic': 'heic',
+    'image/heif': 'heif',
+  };
   return fromType[file.type] || 'jpg';
 }
 
-// Inverted timestamps make R2's lexicographic listing return recent uploads first.
 function objectKey(file) {
   const invertedTime = String(9999999999999 - Date.now()).padStart(13, '0');
   return `${GALLERY_PREFIX}${invertedTime}-${crypto.randomUUID()}.${extension(file)}`;
 }
 
+function isValidAccessCode(code, env) {
+  const provided = String(code || '').trim();
+  if (!provided) return false;
+
+  // Preferred: secret set via `wrangler secret put UPLOAD_ACCESS_CODE`
+  // Supports one code, or multiple comma-separated codes
+  const secret = env.UPLOAD_ACCESS_CODE || '';
+  if (secret) {
+    const allowed = secret.split(',').map((c) => c.trim()).filter(Boolean);
+    return allowed.includes(provided);
+  }
+
+  // Fallback (only if secret is not set) — change these before deploy
+  const fallbackCodes = new Set([
+    '#TGTWURJC#',
+  ]);
+  return fallbackCodes.has(provided);
+}
+
 async function upload(request, env) {
   const form = await request.formData();
   const image = form.get('image');
-  if (!(image instanceof File) || !allowedTypes.has(image.type)) return json({ error: 'Please choose a supported image file.' }, 400);
-  if (image.size > MAX_FILE_BYTES) return json({ error: 'This compressed image is still too large. Please choose a smaller photo.' }, 413);
+  const accessCode = form.get('accessCode');
+
+  // ── Access code check (real protection) ───────────────
+  if (!isValidAccessCode(accessCode, env)) {
+    return json({ error: 'Invalid upload access code.' }, 403);
+  }
+  // ──────────────────────────────────────────────────────
+
+  if (!(image instanceof File) || !allowedTypes.has(image.type)) {
+    return json({ error: 'Please choose a supported image file.' }, 400);
+  }
+  if (image.size > MAX_FILE_BYTES) {
+    return json({ error: 'This compressed image is still too large. Please choose a smaller photo.' }, 413);
+  }
 
   const key = objectKey(image);
   const metadata = {
@@ -49,10 +85,15 @@ async function upload(request, env) {
     caption: cleanMetadata(form.get('caption')),
     createdAt: new Date().toISOString(),
   };
+
   await env.PHOTOS.put(key, image.stream(), {
-    httpMetadata: { contentType: image.type, cacheControl: 'public, max-age=31536000, immutable' },
+    httpMetadata: {
+      contentType: image.type,
+      cacheControl: 'public, max-age=31536000, immutable',
+    },
     customMetadata: metadata,
   });
+
   return json({ key, url: publicUrl(env, key), createdAt: metadata.createdAt }, 201);
 }
 
@@ -60,7 +101,14 @@ async function list(request, env) {
   const url = new URL(request.url);
   const limit = Math.min(Math.max(Number(url.searchParams.get('limit')) || 24, 1), 100);
   const cursor = url.searchParams.get('cursor') || undefined;
-  const result = await env.PHOTOS.list({ prefix: GALLERY_PREFIX, limit, cursor, include: ['customMetadata', 'httpMetadata'] });
+
+  const result = await env.PHOTOS.list({
+    prefix: GALLERY_PREFIX,
+    limit,
+    cursor,
+    include: ['customMetadata', 'httpMetadata'],
+  });
+
   return json({
     items: result.objects.map((object) => ({
       key: object.key,
@@ -76,7 +124,9 @@ async function list(request, env) {
 
 export default {
   async fetch(request, env) {
-    if (request.method === 'OPTIONS') return new Response(null, { headers: corsHeaders() });
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders() });
+    }
     try {
       if (request.method === 'POST') return upload(request, env);
       if (request.method === 'GET') return list(request, env);

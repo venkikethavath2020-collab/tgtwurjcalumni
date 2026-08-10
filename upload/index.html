@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,26 +29,30 @@
     .bar {
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     #dropZone.is-active {
       border-color: #F46352;
       background-color: #fffaf1;
       box-shadow: 0 0 0 4px rgba(244, 99, 82, 0.12);
     }
+
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
+
     .spinner {
       animation: spin 0.8s linear infinite;
     }
   </style>
 </head>
+
 <body class="min-h-screen bg-mist text-ink antialiased">
   <!-- Header -->
   <header class="border-b border-ink/10 bg-ink text-white">
     <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
-      <a href="../" class="font-display text-xl font-bold tracking-tight">
-        Reunion <span class="text-sun">'26</span>
-      </a>
+      <div id="siteBrand"></div>
       <a href="../gallery/"
         class="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/20 hover:text-sun">
         View gallery
@@ -70,8 +75,7 @@
     </div>
 
     <!-- Upload card -->
-    <form id="uploadForm"
-      class="mt-10 overflow-hidden rounded-2xl border border-ink/8 bg-white shadow-xl shadow-ink/8">
+    <form id="uploadForm" class="mt-10 overflow-hidden rounded-2xl border border-ink/8 bg-white shadow-xl shadow-ink/8">
       <div class="p-5 sm:p-8">
         <!-- Drop zone -->
         <label id="dropZone" for="photoInput"
@@ -102,7 +106,7 @@
           </label>
         </div>
 
-        <!-- Selected summary (no individual rows) -->
+        <!-- Selected summary -->
         <div id="selectedSummary" class="mt-6 hidden rounded-xl bg-mist/80 px-4 py-3.5 text-sm">
           <div class="flex items-center justify-between gap-3">
             <span id="selectedCount" class="font-semibold text-ink"></span>
@@ -113,7 +117,7 @@
           </div>
         </div>
 
-        <!-- Overall progress (shown only while uploading) -->
+        <!-- Overall progress -->
         <div id="progressPanel" class="mt-6 hidden">
           <div class="flex items-center justify-between text-sm">
             <span id="progressLabel" class="font-medium text-ink/70">Preparing…</span>
@@ -125,8 +129,19 @@
           <p id="progressDetail" class="mt-2 text-xs text-ink/50"></p>
         </div>
 
+        <!-- Access Code (required) -->
+        <label class="mt-8 block text-sm font-semibold text-ink/80">
+          Upload Access Code <span class="text-coral">*</span>
+          <input name="accessCode" type="password" maxlength="40" required autocomplete="off"
+            class="mt-2 w-full rounded-lg border border-ink/15 bg-white px-3.5 py-3 text-sm font-normal outline-none transition focus:border-coral focus:ring-2 focus:ring-coral/20"
+            placeholder="Enter the code given by the committee" />
+          <span class="mt-1.5 block text-xs font-normal text-ink/50">
+            Only committee-approved members can upload. Ask the organising team for the code.
+          </span>
+        </label>
+
         <!-- Meta fields -->
-        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
           <label class="block text-sm font-semibold text-ink/80">
             Your Name <span class="text-coral">*</span>
             <input name="name" maxlength="80" required
@@ -157,7 +172,7 @@
         </label>
 
         <!-- Submit -->
-        <button type="submit" id="uploadBtn"
+        <button type="submit" id="uploadBtn" disabled
           class="mt-7 flex w-full items-center justify-center gap-2.5 rounded-xl bg-coral px-6 py-4 text-base font-bold text-white shadow-md shadow-coral/25 transition hover:bg-[#dc4f41] focus:outline-none focus:ring-2 focus:ring-coral/40 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70">
           <span id="btnText">Upload Photos</span>
           <svg id="btnSpinner" class="spinner hidden h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -180,7 +195,16 @@
 
   <script type="module">
     import { initUpload } from '../js/upload.js';
+    import { initSiteBrand } from '../js/site-brand.js';
     initUpload();
+
+
+    initSiteBrand('#siteBrand', {
+      href: '/',
+      logoSrc: '../assets/logo.png',
+      logoAlt: 'TGTWURJC',
+    });
   </script>
 </body>
+
 </html>

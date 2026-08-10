@@ -30,9 +30,7 @@
       <nav
         class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8"
       >
-        <a href="../" class="font-display text-xl font-bold"
-          >Reunion <span class="text-sun">'26</span></a
-        >
+      <div id="siteBrand"></div>
         <div class="flex items-center gap-5">
           <a
             href="../upload/"
@@ -111,7 +109,14 @@
 
     <script type="module">
       import { initGallery } from "../js/gallery.js";
+      import { initSiteBrand } from "../js/site-brand.js";
       initGallery();
+
+      initSiteBrand('#siteBrand', {
+      href: '/',
+      logoSrc: '../assets/logo.png',
+      logoAlt: 'TGTWURJC',
+    });
     </script>
   </body>
 </html>

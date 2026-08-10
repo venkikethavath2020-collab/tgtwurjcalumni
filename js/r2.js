@@ -3,6 +3,7 @@ const PHOTO_API =
 
 export async function uploadImage(file, metadata, onProgress) {
   const formData = new FormData();
+  formData.append('accessCode', metadata.accessCode || '');
   formData.append("image", file, file.name);
   formData.append("name", metadata.name || "Anonymous");
   formData.append("batch", metadata.batch || "Not specified");

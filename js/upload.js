@@ -29,6 +29,7 @@ export function initUpload() {
   const progressPercent = document.getElementById("progressPercent");
   const progressDetail = document.getElementById("progressDetail");
 
+  const accessCodeInput = form?.querySelector('[name="accessCode"]');
   const nameInput = form?.querySelector('[name="name"]');
   const batchSelect = form?.querySelector('[name="batch"]');
 
@@ -39,11 +40,12 @@ export function initUpload() {
   // ── Validate required fields + files ───────────────────
   const updateButtonState = () => {
     if (!btn) return;
+    const hasCode = accessCodeInput?.value.trim().length > 0;
     const hasName = nameInput?.value.trim().length > 0;
     const hasBatch = batchSelect?.value.trim().length > 0;
     const hasFiles = selected.length > 0;
 
-    btn.disabled = !(hasName && hasBatch && hasFiles);
+    btn.disabled = !(hasCode && hasName && hasBatch && hasFiles);
   };
 
   const setLoading = (loading) => {
@@ -51,7 +53,6 @@ export function initUpload() {
     btn.disabled = loading;
     if (btnText) btnText.textContent = loading ? "Uploading…" : "Upload Photos";
     if (btnSpinner) btnSpinner.classList.toggle("hidden", !loading);
-    // After loading finishes, re-check required fields
     if (!loading) updateButtonState();
   };
 
@@ -95,7 +96,8 @@ export function initUpload() {
     if (progressBar) progressBar.style.width = "0%";
   };
 
-  // Listen for changes on name & batch
+  // Listen for required field changes
+  accessCodeInput?.addEventListener("input", updateButtonState);
   nameInput?.addEventListener("input", updateButtonState);
   batchSelect?.addEventListener("change", updateButtonState);
 
@@ -172,9 +174,15 @@ export function initUpload() {
       return;
     }
 
+    const accessCode = form.accessCode.value.trim();
     const name = form.name.value.trim();
     const batch = form.batch.value.trim();
 
+    if (!accessCode) {
+      showMessage("Please enter the upload access code.");
+      accessCodeInput?.focus();
+      return;
+    }
     if (!name) {
       showMessage("Please enter your name.");
       nameInput?.focus();
@@ -195,6 +203,7 @@ export function initUpload() {
     setProgress(0, "Starting…", `0 of ${selected.length} photos`);
 
     const metadata = {
+      accessCode,
       name,
       batch,
       caption: form.caption.value.trim(),
@@ -240,6 +249,11 @@ export function initUpload() {
       } catch (error) {
         failed++;
         complete++;
+        // Show server error message if available (e.g. invalid code)
+        const msg = error?.message || "";
+        if (msg.toLowerCase().includes("access code") || msg.includes("403")) {
+          showMessage("Invalid upload access code. Please check with the committee.");
+        }
         setProgress(
           (complete / total) * 100,
           "Uploading…",
@@ -282,7 +296,11 @@ export function initUpload() {
       }, 2200);
     } else {
       hideProgress();
-      showMessage("None of the photos could be uploaded. Please try again.");
+      if (!message.textContent || message.textContent.includes("Invalid")) {
+        // keep existing invalid-code message if already shown
+      } else {
+        showMessage("None of the photos could be uploaded. Please try again.");
+      }
     }
   });
 

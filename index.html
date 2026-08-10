@@ -144,17 +144,97 @@
     .animate-fade-up {
       animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
+
+    /* Intro — logo reveal */
+    #introSplash.is-leaving {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+
+    .intro-logo {
+      transform: scale(0.92);
+      transition:
+        opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .intro-logo.is-in {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #introLine {
+      transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #introLine.is-in {
+      width: 4.5rem;
+    }
+
+    #introHeadline,
+    #introSub {
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(12px);
+    }
+
+    #introHeadline.is-in,
+    #introSub.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .intro-logo,
+      #introLine,
+      #introHeadline,
+      #introSub {
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 
 <body class="bg-mist text-ink antialiased">
+
+  <!-- Intro splash — logo reveal -->
+  <div id="introSplash" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-ink px-6 text-white"
+    role="dialog" aria-modal="true" aria-label="Welcome introduction">
+    <div class="grain pointer-events-none absolute inset-0 opacity-20"></div>
+
+    <div class="relative z-10 mx-auto flex w-full max-w-md flex-col items-center text-center">
+      <!-- Logo: change src if your filename differs -->
+      <img id="introLogo" src="assets/logo.png" alt="TGTWURJC"
+        class="intro-logo h-auto w-36 opacity-0 sm:w-44 hidden " />
+
+      <div id="introLine" class="mt-6 h-px w-0 bg-sun "></div>
+
+      <p id="introHeadline"
+        class="mt-8 font-display text-3xl font-bold leading-snug tracking-tight opacity-0 sm:text-4xl">
+        Once classmates. Forever alumni.
+      </p>
+
+      <p id="introSub" class="mt-4 text-sm tracking-wide text-white/55 opacity-0 sm:text-base">
+        The official platform of the TGTWURJC Alumni Association
+      </p>
+    </div>
+
+    <button type="button" id="introSkip"
+      class="absolute bottom-8 right-6 z-10 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/70 transition hover:border-sun hover:text-sun sm:bottom-10 sm:right-10">
+      Skip
+    </button>
+  </div>
   <!-- Header -->
   <header class="absolute inset-x-0 top-0 z-20">
     <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8" aria-label="Main navigation">
-      <a href="#top" class="font-display text-xl font-bold tracking-wide text-white">
-        Reunion <span class="text-sun">'26</span>
+      <a href="#top" class="flex items-center gap-2.5 font-display text-xl font-bold tracking-wide text-white">
+        <img id="introLogo_header" src="assets/logo.png" alt="TGTWURJC"
+          class="h-8 w-8 object-contain sm:h-9 sm:w-9 hidden" />
+        <span>
+          Reunion <span class="text-sun">'26</span>
+        </span>
       </a>
-
       <!-- Desktop links -->
       <div class="hidden items-center gap-8 text-sm font-semibold text-white/85 md:flex">
         <a class="transition hover:text-sun" href="#about">Our school</a>
@@ -242,7 +322,7 @@
         class="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:pb-20 lg:px-8">
         <p class="mb-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-sun">
           <span class="h-px w-10 bg-sun"></span>
-          2007 – 2013 Batch
+          2007 – 2013 · TGTWURJC
         </p>
 
         <h1 class="max-w-4xl font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
@@ -250,17 +330,18 @@
         </h1>
 
         <p class="mt-7 max-w-xl text-base leading-8 text-white/75 sm:text-lg">
-          One classroom. A thousand stories. Let’s come home for a day that brings every memory back to life.
+          One campus. A thousand ordinary days that still feel like home.
+          Let’s walk back into the place that shaped us.
         </p>
 
         <div class="mt-9 flex flex-wrap gap-3">
-          <a href="#guidelines"
+          <a href="#register"
             class="rounded-full bg-coral px-7 py-3.5 text-sm font-bold text-white shadow-glow transition hover:bg-[#d44e3f]">
-            School guidelines
+            I’m coming
           </a>
           <a href="#details"
             class="rounded-full border border-white/25 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-white/10">
-            See the plan
+            See the day
           </a>
         </div>
 
@@ -300,7 +381,7 @@
           style="animation-delay: 140ms">
           Years may have passed, but the memories we created at
           <span class="relative inline font-semibold text-ink">
-            Telangana Government Tribal Welfare Residential Upgraded Junior College (TGTWURJC), Jinnaram
+            Telangana Tribal Welfare Residential Upgraded Junior College (TGTWURJC), Jinnaram
             <span class="absolute bottom-0 left-0 h-[2px] w-full bg-coral/35"></span>
           </span>
           remain close to our hearts.
@@ -331,9 +412,9 @@
         <div
           class="absolute -bottom-6 -right-2 max-w-[240px] rounded-2xl bg-coral p-5 text-white shadow-glow sm:-right-4">
           <p class="font-display text-xl font-bold leading-tight sm:text-2xl">
-            Friendship.<br />Gratitude.<br />Home.
+            Same ground.<br />Same pride.<br />New chapters.
           </p>
-          <p class="mt-2 text-sm text-white/80">The ties that time cannot change.</p>
+          <p class="mt-2 text-sm text-white/80">The ties that time could not undo.</p>
         </div>
       </div>
     </section>
@@ -343,21 +424,17 @@
       <div class="pointer-events-none absolute -right-20 top-1/3 h-80 w-80 rounded-full bg-sun/20 blur-3xl"></div>
       <div
         class="relative mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16 lg:px-8">
-        <div>
-          <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-coral animate-fade-up">About our school</p>
-          <h2 class="mt-3 font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl animate-fade-up"
-            style="animation-delay: 80ms">
-            Telangana Tribal Welfare Residential Upgraded Junior College
-          </h2>
-          <p class="mt-5 flex items-center gap-2 text-sm font-semibold text-muted animate-fade-up"
-            style="animation-delay: 140ms">
-            <span class="inline-block h-1.5 w-1.5 rounded-full bg-coral"></span>
-            TGTWURJC, Jinnaram, Sangareddy District
+        <div class="mt-2 flex gap-4 pt-2 animate-fade-up" style="animation-delay: 300ms">
+          <div class="mt-1 w-1 shrink-0 rounded-full bg-coral"></div>
+          <p class="font-display text-2xl font-bold leading-snug text-ink sm:text-3xl">
+            We don’t only look back.
+            We return to
+            <span class="text-coral">give something forward.</span>
           </p>
         </div>
         <div class="space-y-5 text-base leading-8 text-muted sm:text-lg">
           <p class="animate-fade-up" style="animation-delay: 160ms">
-            Telangana Government Tribal Welfare Residential Upgraded Junior College has played an important role in
+            Telangana Tribal Welfare Residential Upgraded Junior College has played an important role in
             nurturing generations of students through
             <span class="font-semibold text-ink">quality education, discipline, values, and character</span>.
           </p>
@@ -617,14 +694,16 @@
           <!-- Left: copy -->
           <div>
             <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-coral">
-              Join the reunion
+              Take your place
             </p>
             <h2 class="mt-3 font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
-              Register &amp; contribute
+              Confirm you’re coming home
             </h2>
             <p class="mt-5 max-w-lg text-base leading-8 text-muted sm:text-lg">
-              Confirm your presence and support the day. Your contribution helps cover event costs and our
-              <span class="font-semibold text-ink">“Pay Back to School”</span> initiatives.
+              Registration is how we save you a seat at the table.
+              Your contribution helps the day — and our
+              <span class="font-semibold text-ink">“Pay Back to School”</span>
+              promise to the campus that shaped us.
             </p>
 
             <!-- Key points -->
@@ -640,7 +719,8 @@
                   <p class="font-semibold text-ink">Contribution</p>
                   <p class="mt-0.5 text-sm leading-6 text-muted">
                     <strong class="text-ink">Minimum ₹1,000</strong> per person.
-                    You’re welcome to contribute more if you wish — every extra rupee supports the event and our school.
+                    More is welcome — every extra rupee strengthens the reunion and the students who will walk these
+                    corridors after us.
                   </p>
                 </div>
               </li>
@@ -654,8 +734,8 @@
                 <div>
                   <p class="font-semibold text-ink">How to contribute</p>
                   <p class="mt-0.5 text-sm leading-6 text-muted">
-                    Pay directly to your <strong class="text-ink">batch committee member</strong> (cash / UPI).
-                    Do not transfer to random accounts.
+                    Pay only your <strong class="text-ink">batch committee member</strong> (cash / UPI).
+                    Please don’t transfer to unknown accounts.
                   </p>
                 </div>
               </li>
@@ -669,17 +749,17 @@
                 <div>
                   <p class="font-semibold text-ink">Where it goes</p>
                   <p class="mt-0.5 text-sm leading-6 text-muted">
-                    Event arrangements, hospitality, and alumni contributions toward school support.
+                    The day’s arrangements, hospitality, and alumni support for the school that gave us our start.
                   </p>
                 </div>
               </li>
             </ul>
 
             <p class="mt-8 text-sm leading-6 text-muted/80">
-              Need the right contact? Open
+              Need the right person?
               <button type="button" id="contactButtonTop"
                 class="font-semibold text-coral underline decoration-coral/40 underline-offset-2 transition hover:text-[#d44e3f]">
-                committee contacts
+                Open committee contacts
               </button>
               and reach your batch coordinator.
             </p>
@@ -694,7 +774,7 @@
                     Registration form
                   </p>
                   <h3 class="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                    Confirm your seat
+                    I’m coming home
                   </h3>
                 </div>
                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sun text-ink shadow-sm">
@@ -706,7 +786,7 @@
               </div>
 
               <p class="mt-4 text-sm leading-6 text-muted">
-                Fill the short Google Form with your name, batch, and contact details.
+                Share your name, batch, and contact on the short form.
                 Then complete your contribution with your batch committee member.
               </p>
 
@@ -718,22 +798,22 @@
                     ₹
                   </div>
                   <div>
-                    <p class="text-sm font-bold text-ink">Minimum ₹1,000 · more welcome</p>
+                    <p class="text-sm font-bold text-ink">Minimum ₹1,000 · more is a gift</p>
                     <p class="text-xs leading-5 text-muted">
-                      Per person · Pay only to your batch committee member
+                      Per person · Only to your batch committee member
                     </p>
                   </div>
                 </div>
                 <p class="mt-3 border-t border-sun/30 pt-3 text-xs leading-5 text-ink/70">
-                  Happy to give more? Any amount above ₹1,000 is gratefully accepted and goes further toward the reunion
-                  and school support.
+                  Happy to give more? Anything above ₹1,000 is received with gratitude —
+                  for this reunion, and for those who will study here after us.
                 </p>
               </div>
 
               <a href="https://docs.google.com/forms/d/1MLx2j_mj42p_GPg7vqCSBcgqHkOF9Gz54sVgGAwCvaA/viewform"
                 target="_blank" rel="noopener noreferrer"
                 class="mt-7 flex w-full items-center justify-center gap-2 rounded-full bg-coral px-6 py-4 text-base font-bold text-white shadow-glow transition hover:bg-[#d44e3f]">
-                Open registration form
+                I’m in — register me
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -741,13 +821,14 @@
               </a>
 
               <p class="mt-4 text-center text-xs leading-5 text-muted/70">
-                Opens in a new tab · Google Form · Takes about 1–2 minutes
+                Opens in a new tab · Google Form · About 1–2 minutes
               </p>
             </div>
           </div>
         </div>
       </div>
     </section>
+
     <!-- Guidlines -->
 
     <section id="guidelines" class="bg-sun py-16 lg:py-20">
@@ -869,7 +950,7 @@
 
         <!-- Closing line -->
         <p class="mx-auto mt-10 max-w-2xl text-center font-display text-xl font-bold leading-snug text-ink sm:text-2xl">
-          Let’s make the TGTWURJC Grand Reunion 2026 memorable, respectful, and meaningful.
+          Let’s honour this campus the way it once honoured us with care, pride, and respect.
         </p>
       </div>
     </section>
@@ -877,18 +958,32 @@
     <!-- Gallery -->
     <section id="gallery" class="bg-[#E8EBE4] py-20 lg:py-28">
       <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-coral">Our shared album</p>
-            <h2 class="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">The wall of moments.</h2>
+            <h2 class="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">
+              The wall of moments.
+            </h2>
+            <p class="mt-3 max-w-md text-sm leading-6 text-muted sm:text-base">
+              Every photo adds another piece of our story. Upload from the day — or from the years we shared.
+            </p>
           </div>
+
           <a href="upload/"
-            class="font-bold text-ink underline decoration-coral decoration-2 underline-offset-4 transition hover:text-coral">
-            Add your moment
+            class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-coral px-5 py-3 text-sm font-bold text-white shadow-glow transition hover:bg-[#d44e3f]">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Upload photos
           </a>
         </div>
+
         <div id="galleryGrid" class="mt-10 columns-2 gap-3 sm:columns-3 lg:columns-4"></div>
+
         <p id="galleryState" class="mx-auto mt-10 hidden max-w-md text-center text-lg leading-8 text-muted"></p>
+
+        <!-- Load more stays below the grid (needed for pagination / infinite scroll) -->
         <button id="loadMore"
           class="mx-auto mt-10 hidden rounded-full bg-ink px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1a4543]">
           Load more memories
@@ -896,32 +991,16 @@
       </div>
     </section>
 
-    <!-- Upload CTA -->
-    <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-      <div
-        class="flex flex-col items-start justify-between gap-8 border-y border-ink/10 py-12 lg:flex-row lg:items-center">
-        <div>
-          <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-coral">Live photo upload</p>
-          <h2 class="mt-3 font-display text-4xl font-bold tracking-tight">Your lens. Our memory.</h2>
-          <p class="mt-3 max-w-xl text-muted">
-            Share your moments from the reunion directly from your phone. Compressed photos will appear in the gallery
-            shortly after upload.
-          </p>
-        </div>
-        <a href="upload/"
-          class="rounded-full bg-coral px-7 py-4 font-bold text-white shadow-glow transition hover:bg-[#d44e3f]">
-          Upload reunion photos
-        </a>
-      </div>
-    </section>
   </main>
 
   <!-- Footer -->
   <footer id="contact" class="bg-ink text-white">
     <div class="mx-auto flex max-w-7xl flex-col justify-between gap-8 px-5 py-12 sm:flex-row lg:px-8">
       <div>
-        <p class="font-display text-3xl font-bold tracking-tight">Government Tribal Welfare<br />Residential Junior
-          College</p>
+        <p class="font-display text-3xl font-bold tracking-tight">
+          Telangana Tribal Welfare <br /> Upgraded Residential Junior College
+        </p>
+
         <p class="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-sun">TGTWURJC</p>
         <p class="mt-2 text-sm text-white/60">Sangareddy, Jinnaram, Telangana 502319</p>
       </div>
@@ -1371,8 +1450,77 @@
 
   <script type="module">
     import { initGallery } from './js/gallery.js';
+    import { applyLogoVisibility } from './js/site-brand.js';
     initGallery({ preview: true });
+    // One flag controls splash + header
+    applyLogoVisibility('introLogo', 'introLogo_header');
   </script>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'reunion26_intro_seen';
+      const splash = document.getElementById('introSplash');
+      const logo = document.getElementById('introLogo');
+      const line = document.getElementById('introLine');
+      const headline = document.getElementById('introHeadline');
+      const sub = document.getElementById('introSub');
+      const skipBtn = document.getElementById('introSkip');
+
+      if (!splash) return;
+
+      // Already seen
+      if (localStorage.getItem(STORAGE_KEY)) {
+        splash.remove();
+        return;
+      }
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let cancelled = false;
+      const timers = [];
+
+      function later(fn, ms) {
+        const id = window.setTimeout(fn, ms);
+        timers.push(id);
+        return id;
+      }
+
+      function finish() {
+        if (cancelled) return;
+        cancelled = true;
+        timers.forEach(clearTimeout);
+        localStorage.setItem(STORAGE_KEY, '1');
+        splash.classList.add('is-leaving');
+        window.setTimeout(() => splash.remove(), 750);
+      }
+
+      skipBtn?.addEventListener('click', finish);
+      document.addEventListener('keydown', function onKey(e) {
+        if (e.key === 'Escape') {
+          finish();
+          document.removeEventListener('keydown', onKey);
+        }
+      });
+
+      // Reduced motion: show final state briefly
+      if (reduceMotion) {
+        logo?.classList.add('is-in');
+        line?.classList.add('is-in');
+        headline?.classList.add('is-in');
+        sub?.classList.add('is-in');
+        later(finish, 1600);
+        return;
+      }
+
+      // Sequence
+      later(() => logo?.classList.add('is-in'), 280);
+      later(() => line?.classList.add('is-in'), 1000);
+      later(() => headline?.classList.add('is-in'), 1500);
+      later(() => sub?.classList.add('is-in'), 2200);
+      later(finish, 5000);
+    })();
+  </script>
+
+
 </body>
 
 </html>

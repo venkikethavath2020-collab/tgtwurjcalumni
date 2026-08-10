@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────
 // Flip to true on 16 Aug (or whenever) and redeploy
-export const SHOW_LOGO = false;
+export const SHOW_LOGO = true;
 // ─────────────────────────────────────────────
 
 /**

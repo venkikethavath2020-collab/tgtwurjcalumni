@@ -84,6 +84,10 @@
     }
 
     /* Hero carousel */
+    #heroSlides {
+      z-index: 0;
+    }
+
     #heroSlides .hero-slide {
       position: absolute;
       inset: 0;
@@ -100,6 +104,9 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      /* Slight lift so photos don’t look muddy under the overlay */
+      filter: brightness(1.05) contrast(1.04) saturate(1.05);
     }
 
     #heroSlides .hero-slide.is-active img {
@@ -116,6 +123,21 @@
       }
     }
 
+    /* Overlay stack — keeps text readable without hiding the photo */
+    #heroOverlay {
+      z-index: 1;
+      background:
+        /* Soft left vignette for text column */
+        linear-gradient(90deg, rgba(15, 46, 45, 0.55) 0%, rgba(15, 46, 45, 0.28) 42%, rgba(15, 46, 45, 0.08) 70%, transparent 100%),
+        /* Bottom fade so date strip & CTAs stay legible */
+        linear-gradient(0deg, rgba(15, 46, 45, 0.72) 0%, rgba(15, 46, 45, 0.35) 38%, transparent 68%);
+    }
+
+    #heroGrain {
+      z-index: 2;
+      opacity: 0.12;
+    }
+
     #heroDots button {
       width: 8px;
       height: 8px;
@@ -127,6 +149,37 @@
     #heroDots button.is-active {
       width: 24px;
       background: #F5C84C;
+    }
+
+    /* Hero text cross-fade + legibility on bright photos */
+    #heroCopy {
+      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      text-shadow: 0 2px 24px rgba(15, 46, 45, 0.45);
+    }
+
+    #heroTitle {
+      text-shadow: 0 4px 32px rgba(15, 46, 45, 0.55);
+    }
+
+    #heroCopy.is-leaving {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    #heroCopy.is-entering {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    #heroCopy.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #heroCopy {
+        transition: none !important;
+      }
     }
 
     @keyframes fade-up {
@@ -164,6 +217,117 @@
       transform: scale(1);
     }
 
+    .intro-logo.is-pop {
+      animation: logo-pop 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes logo-pop {
+      0% {
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Countdown 3-2-1 */
+    #introCountdown {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #introCountdown.hidden {
+      display: none;
+    }
+
+    #introCountNum {
+      font-family: Georgia, Cambria, 'Times New Roman', serif;
+      font-size: clamp(5.5rem, 22vw, 9rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #F5C84C;
+      text-shadow: 0 8px 40px rgba(245, 200, 76, 0.35);
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    #introCountNum.is-in {
+      animation: count-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    #introCountNum.is-out {
+      animation: count-out 0.28s ease-in both;
+    }
+
+    @keyframes count-in {
+      from {
+        opacity: 0;
+        transform: scale(0.45);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes count-out {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(1.25);
+      }
+    }
+
+    /* Confetti / ribbons */
+    #introConfetti {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -12px;
+      border-radius: 2px;
+      opacity: 0.95;
+      will-change: transform;
+      animation-name: confetti-fall;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+    }
+
+    .confetti-piece.is-ribbon {
+      border-radius: 1px;
+      width: 6px !important;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translate3d(0, -10vh, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(var(--drift, 40px), 110vh, 0) rotate(var(--spin, 720deg));
+        opacity: 0.85;
+      }
+    }
+
     #introLine {
       transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -189,8 +353,11 @@
       .intro-logo,
       #introLine,
       #introHeadline,
-      #introSub {
+      #introSub,
+      #introCountNum,
+      .confetti-piece {
         transition: none !important;
+        animation: none !important;
       }
     }
 
@@ -255,12 +422,20 @@
     role="dialog" aria-modal="true" aria-label="Welcome introduction">
     <div class="grain pointer-events-none absolute inset-0 opacity-20"></div>
 
-    <div class="relative z-10 mx-auto flex w-full max-w-md flex-col items-center text-center">
-      <!-- Logo: change src if your filename differs -->
-      <img id="introLogo" src="assets/logo.png" alt="TGTWURJC"
-        class="intro-logo h-auto w-36 opacity-0 sm:w-44 hidden " />
+    <!-- Confetti layer (filled when logo reveals) -->
+    <div id="introConfetti" aria-hidden="true"></div>
 
-      <div id="introLine" class="mt-6 h-px w-0 bg-sun "></div>
+    <!-- 3-2-1 countdown (only when SHOW_LOGO) -->
+    <div id="introCountdown" class="hidden" aria-live="polite" aria-atomic="true">
+      <span id="introCountNum">3</span>
+    </div>
+
+    <div class="relative z-10 mx-auto flex w-full max-w-md flex-col items-center text-center">
+      <!-- Logo: visible only when SHOW_LOGO is true -->
+      <img id="introLogo" src="assets/logo.png" alt="TGTWURJC"
+        class="intro-logo h-auto w-36 opacity-0 sm:w-44 hidden" />
+
+      <div id="introLine" class="mt-6 h-px w-0 bg-sun"></div>
 
       <p id="introHeadline"
         class="mt-8 font-display text-3xl font-bold leading-snug tracking-tight opacity-0 sm:text-4xl">
@@ -367,24 +542,28 @@
     <!-- Hero -->
     <section id="hero" class="relative min-h-[100svh] overflow-hidden bg-ink text-white">
       <div id="heroSlides" class="absolute inset-0"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/25"></div>
-      <div class="grain pointer-events-none absolute inset-0 opacity-20"></div>
+      <!-- Lighter dual gradient: left for copy, bottom for CTAs — photos stay visible -->
+      <div id="heroOverlay" class="pointer-events-none absolute inset-0"></div>
+      <div id="heroGrain" class="grain pointer-events-none absolute inset-0"></div>
 
       <div
-        class="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:pb-20 lg:px-8">
-        <p class="mb-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-sun">
-          <span class="h-px w-10 bg-sun"></span>
-          2007 – 2013 · TGTWURJC
-        </p>
+        class="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:pb-20 lg:px-8">
+        <div id="heroCopy" class="is-visible" aria-live="polite">
+          <p id="heroLabel" class="mb-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-sun">
+            <span class="h-px w-10 bg-sun"></span>
+            <span id="heroLabelText">2007 – 2013 · TGTWURJC</span>
+          </p>
 
-        <h1 class="max-w-4xl font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
-          Some bonds<br />never graduate.
-        </h1>
+          <h1 id="heroTitle"
+            class="max-w-4xl font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
+            Some bonds<br />never graduate.
+          </h1>
 
-        <p class="mt-7 max-w-xl text-base leading-8 text-white/75 sm:text-lg">
-          One campus. A thousand ordinary days that still feel like home.
-          Let’s walk back into the place that shaped us.
-        </p>
+          <p id="heroSubtitle" class="mt-7 max-w-xl text-base leading-8 text-white/75 sm:text-lg">
+            One campus. A thousand ordinary days that still feel like home.
+            Let’s walk back into the place that shaped us.
+          </p>
+        </div>
 
         <div class="mt-9 flex flex-wrap gap-3">
           <a href="#register"
@@ -509,43 +688,117 @@
     </section>
 
     <!-- Details -->
-    <section id="details" class="bg-ink py-20 text-white lg:py-28">
-      <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="max-w-xl">
-          <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-sun">Mark the calendar</p>
-          <h2 class="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">One day. All of us.</h2>
+    <section id="details" class="relative overflow-hidden bg-ink py-20 text-white lg:py-28">
+      <!-- Soft ambient glows -->
+      <div class="pointer-events-none absolute -left-32 top-1/4 h-80 w-80 rounded-full bg-sun/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-coral/10 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <!-- Header -->
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div class="max-w-xl">
+            <p class="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-sun">
+              <span class="h-px w-8 bg-sun"></span>
+              Mark the calendar
+            </p>
+            <h2 class="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">
+              One day. All of us.
+            </h2>
+          </div>
+          <p class="max-w-xs text-sm leading-6 text-white/50 sm:text-right">
+            Save the date, pack the memories, and find your way back to Jinnaram.
+          </p>
         </div>
-        <div class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-white/10 sm:grid-cols-3">
-          <article class="bg-ink p-7 sm:p-8">
-            <p class="text-xs font-bold uppercase tracking-wider text-sun">When</p>
-            <p class="mt-4 font-display text-3xl font-bold">Sunday<br />16 August 2026</p>
-            <p class="mt-3 text-white/60">09:00 AM – 8:30 PM</p>
+
+        <!-- Info cards -->
+        <div class="mt-12 grid gap-4 sm:grid-cols-3">
+          <!-- When -->
+          <article
+            class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-sun/40 hover:bg-white/[0.07] sm:p-7">
+            <div
+              class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-sun/15 text-sun transition group-hover:bg-sun group-hover:text-ink">
+              <i data-lucide="calendar-days" class="h-5 w-5"></i>
+            </div>
+            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-sun">When</p>
+            <p class="mt-3 font-display text-2xl font-bold leading-tight sm:text-3xl">
+              Sunday<br />16 August 2026
+            </p>
+            <p class="mt-3 flex items-center gap-2 text-sm text-white/55">
+              <i data-lucide="clock" class="h-3.5 w-3.5 shrink-0 text-sun/80"></i>
+              09:00 AM – 8:30 PM
+            </p>
           </article>
-          <article class="bg-ink p-7 sm:p-8">
-            <p class="text-xs font-bold uppercase tracking-wider text-sun">Where</p>
-            <p class="mt-4 font-display text-3xl font-bold">TGTWURJC</p>
-            <p class="mt-3 leading-6 text-white/60">Sangareddy, Jinnaram,<br />Telangana 502319</p>
+
+          <!-- Where -->
+          <article
+            class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-sun/40 hover:bg-white/[0.07] sm:p-7">
+            <div
+              class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-sun/15 text-sun transition group-hover:bg-sun group-hover:text-ink">
+              <i data-lucide="map-pin" class="h-5 w-5"></i>
+            </div>
+            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-sun">Where</p>
+            <p class="mt-3 font-display text-2xl font-bold leading-tight sm:text-3xl">TGTWURJC</p>
+            <p class="mt-3 text-sm leading-6 text-white/55">
+              Sangareddy, Jinnaram,<br />Telangana 502319
+            </p>
           </article>
-          <article class="bg-ink p-7 sm:p-8">
-            <p class="text-xs font-bold uppercase tracking-wider text-sun">Dress note</p>
-            <p class="mt-4 font-display text-3xl font-bold">Come as<br />your best self</p>
-            <p class="mt-3 text-white/60">Smart casuals, bright memories.</p>
+
+          <!-- Dress -->
+          <article
+            class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-sun/40 hover:bg-white/[0.07] sm:p-7">
+            <div
+              class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-sun/15 text-sun transition group-hover:bg-sun group-hover:text-ink">
+              <i data-lucide="shirt" class="h-5 w-5"></i>
+            </div>
+            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-sun">Dress note</p>
+            <p class="mt-3 font-display text-2xl font-bold leading-tight sm:text-3xl">
+              Come as<br />your best self
+            </p>
+            <p class="mt-3 text-sm text-white/55">Smart casuals, bright memories.</p>
           </article>
         </div>
-        <div class="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <iframe title="TGTWURJC location map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d562.9625003492702!2d78.31856251419816!3d17.61812581791026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb8b685e16ee83%3A0xb6e2c64d746d75b3!2sT.S.T.W.R.%20E%2FM%20SCHOOL!5e1!3m2!1sen!2sin!4v1785769804944!5m2!1sen!2sin"
-            class="h-[320px] w-full rounded-2xl border-0" loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <div>
+
+        <!-- Map + directions -->
+        <div class="mt-10 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] lg:grid lg:grid-cols-[1.2fr_0.8fr]">
+          <!-- Map -->
+          <div class="relative min-h-[280px] sm:min-h-[340px]">
+            <iframe title="TGTWURJC location map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d562.9625003492702!2d78.31856251419816!3d17.61812581791026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb8b685e16ee83%3A0xb6e2c64d746d75b3!2sT.S.T.W.R.%20E%2FM%20SCHOOL!5e1!3m2!1sen!2sin!4v1785769804944!5m2!1sen!2sin"
+              class="absolute inset-0 h-full w-full border-0 grayscale-[20%] contrast-[1.05]"
+              loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- Subtle top fade so map blends with card -->
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-ink/40 to-transparent lg:hidden"></div>
+          </div>
+
+          <!-- Directions panel -->
+          <div class="flex flex-col justify-center border-t border-white/10 p-7 sm:p-9 lg:border-l lg:border-t-0">
             <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-sun">Getting there</p>
-            <h3 class="mt-3 font-display text-3xl font-bold tracking-tight">Find your way back.</h3>
-            <p class="mt-4 max-w-md leading-7 text-white/60">
+            <h3 class="mt-3 font-display text-3xl font-bold tracking-tight">
+              Find your way back.
+            </h3>
+            <p class="mt-4 max-w-sm text-sm leading-7 text-white/55">
               <strong class="text-white">TGTWURJC,</strong> Sangareddy, Jinnaram, Telangana 502319
             </p>
+
+            <ul class="mt-6 space-y-3 text-sm text-white/50">
+              <li class="flex gap-3">
+                <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sun/15 text-sun">
+                  <i data-lucide="navigation" class="h-3 w-3"></i>
+                </span>
+                <span>Campus is in Jinnaram, Sangareddy district</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sun/15 text-sun">
+                  <i data-lucide="car" class="h-3 w-3"></i>
+                </span>
+                <span>Parking available in designated areas on campus</span>
+              </li>
+            </ul>
+
             <a href="https://maps.app.goo.gl/kwgcy6f1jwkvQ2bQA" target="_blank" rel="noopener noreferrer"
-              class="mt-6 inline-flex items-center gap-2 rounded-full bg-sun px-5 py-3 text-sm font-bold text-ink transition hover:bg-white">
-              <i data-lucide="map" class="h-4 w-4"></i> Open in Google Maps
+              class="mt-8 inline-flex w-fit items-center gap-2.5 rounded-full bg-sun px-5 py-3 text-sm font-bold text-ink shadow-sm transition hover:bg-white hover:shadow-md">
+              <i data-lucide="map" class="h-4 w-4"></i>
+              Open in Google Maps
             </a>
           </div>
         </div>
@@ -883,127 +1136,223 @@
 
     <!-- Guidlines -->
 
-    <section id="guidelines" class="bg-sun py-16 lg:py-20">
-      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <section id="guidelines" class="relative overflow-hidden bg-sun py-20 lg:py-28">
+      <!-- Soft decorative blobs -->
+      <div class="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-coral/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-ink/5 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
         <!-- Header -->
-        <div class="max-w-2xl">
-          <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-coral">
-            For a thoughtful gathering
-          </p>
-          <h2 class="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            School Administration Guidelines
-          </h2>
-          <p class="mt-3 text-sm leading-6 text-ink/65 sm:text-base">
-            A few shared commitments will help us celebrate with respect for the school, its students, and every guest.
-          </p>
-        </div>
-
-        <!-- Compact list -->
-        <div class="mt-10 divide-y divide-ink/10 border-y border-ink/10">
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="map-pin" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Restricted Access</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Stay within designated event areas unless accompanied by
-                school representatives.</p>
-            </div>
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div class="max-w-xl">
+            <p class="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-coral">
+              <span class="h-px w-8 bg-coral"></span>
+              For a thoughtful gathering
+            </p>
+            <h2 class="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              School Administration Guidelines
+            </h2>
+            <p class="mt-4 max-w-md text-sm leading-6 text-ink/65 sm:text-base">
+              A few shared commitments will help us celebrate with respect for the school, its students, and every guest.
+            </p>
           </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="school" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Respect School Property</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Classrooms, labs, library, and sports facilities need
-                prior permission before use.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="camera" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Photography & Videography</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Capture memories responsibly and follow the school’s
-                privacy policies.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="heart-handshake" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Appropriate Conduct</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Maintain discipline, respectful language, and the dignity
-                of the institution.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="ban" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">No Political or Commercial Activities</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Non-political, non-religious, non-commercial event. No
-                promotions or advertising.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="message-square-heart" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">No Public Criticism</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Share constructive suggestions privately after the event —
-                not publicly on campus.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="wine-off" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Alcohol-Free Event</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">No alcohol on campus. Anyone under the influence will not
-                be permitted to attend.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="shield-check" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Follow Safety Instructions</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Follow directions from school authorities and volunteers,
-                including emergency procedures.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="trash-2" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Keep the Campus Clean</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Use dustbins and dispose of waste responsibly throughout
-                the event.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="car-front" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Parking & Traffic</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Park only in designated areas and follow volunteer
-                directions.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4 py-4 sm:gap-5">
-            <i data-lucide="utensils" class="mt-0.5 h-5 w-5 shrink-0 text-coral"></i>
-            <div>
-              <h3 class="font-display text-base font-bold sm:text-lg">Food & Refreshments</h3>
-              <p class="mt-0.5 text-sm leading-6 text-ink/60">Eat only in designated areas and help keep those spaces
-                clean.</p>
-            </div>
+          <div
+            class="inline-flex items-center gap-3 self-start rounded-full border border-ink/10 bg-white/60 px-4 py-2.5 text-xs font-semibold text-ink/70 backdrop-blur-sm lg:self-auto">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-[11px] font-bold text-sun">11</span>
+            guidelines to follow
           </div>
         </div>
 
-        <!-- Closing line -->
-        <p class="mx-auto mt-10 max-w-2xl text-center font-display text-xl font-bold leading-snug text-ink sm:text-2xl">
-          Let’s honour this campus the way it once honoured us with care, pride, and respect.
-        </p>
+        <!-- Card grid -->
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- 01 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="map-pin" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">01</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Restricted Access</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Stay within designated event areas unless accompanied by school representatives.
+            </p>
+          </article>
+
+          <!-- 02 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="school" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">02</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Respect School Property</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Classrooms, labs, library, and sports facilities need prior permission before use.
+            </p>
+          </article>
+
+          <!-- 03 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="camera" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">03</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Photography &amp; Videography</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Capture memories responsibly and follow the school’s privacy policies.
+            </p>
+          </article>
+
+          <!-- 04 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="heart-handshake" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">04</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Appropriate Conduct</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Maintain discipline, respectful language, and the dignity of the institution.
+            </p>
+          </article>
+
+          <!-- 05 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="ban" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">05</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">No Political or Commercial Activities</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Non-political, non-religious, non-commercial event. No promotions or advertising.
+            </p>
+          </article>
+
+          <!-- 06 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="message-square-heart" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">06</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">No Public Criticism</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Share constructive suggestions privately after the event — not publicly on campus.
+            </p>
+          </article>
+
+          <!-- 07 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="wine-off" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">07</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Alcohol-Free Event</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              No alcohol on campus. Anyone under the influence will not be permitted to attend.
+            </p>
+          </article>
+
+          <!-- 08 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="shield-check" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">08</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Follow Safety Instructions</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Follow directions from school authorities and volunteers, including emergency procedures.
+            </p>
+          </article>
+
+          <!-- 09 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="trash-2" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">09</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Keep the Campus Clean</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Use dustbins and dispose of waste responsibly throughout the event.
+            </p>
+          </article>
+
+          <!-- 10 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="car-front" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">10</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Parking &amp; Traffic</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Park only in designated areas and follow volunteer directions.
+            </p>
+          </article>
+
+          <!-- 11 -->
+          <article
+            class="group flex flex-col rounded-2xl border border-ink/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-ink/15 hover:bg-white hover:shadow-md sm:p-6">
+            <div class="mb-4 flex items-start justify-between gap-3">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-coral/10 text-coral transition group-hover:bg-coral group-hover:text-white">
+                <i data-lucide="utensils" class="h-5 w-5"></i>
+              </span>
+              <span class="font-display text-2xl font-bold text-ink/10 transition group-hover:text-ink/20">11</span>
+            </div>
+            <h3 class="font-display text-lg font-bold text-ink">Food &amp; Refreshments</h3>
+            <p class="mt-2 text-sm leading-6 text-ink/60">
+              Eat only in designated areas and help keep those spaces clean.
+            </p>
+          </article>
+        </div>
+
+        <!-- Closing banner -->
+        <div
+          class="mt-12 flex flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-ink px-6 py-8 text-center sm:px-10 sm:py-10">
+          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sun text-ink">
+            <i data-lucide="heart" class="h-5 w-5"></i>
+          </div>
+          <p class="max-w-xl font-display text-xl font-bold leading-snug text-white sm:text-2xl">
+            Let’s honour this campus the way it once honoured us —
+            <span class="text-sun">with care, pride, and respect.</span>
+          </p>
+        </div>
       </div>
     </section>
 
@@ -1335,44 +1684,129 @@
 
   <script>
     (function () {
-      const TOTAL_IMAGES = 5;
       const INTERVAL_MS = 5500;
       const BASE_PATH = 'assets/hero/';
       const slidesEl = document.getElementById('heroSlides');
       const dotsEl = document.getElementById('heroDots');
+      const copyEl = document.getElementById('heroCopy');
+      const labelTextEl = document.getElementById('heroLabelText');
+      const titleEl = document.getElementById('heroTitle');
+      const subtitleEl = document.getElementById('heroSubtitle');
       if (!slidesEl) return;
+
+      // One entry per background image — order matches image_1 … image_5
+      const SLIDES = [
+        {
+          label: '2007 – 2013 · TGTWURJC',
+          title: 'Some bonds<br />never graduate.',
+          subtitle:
+            'One campus. A thousand ordinary days that still feel like home. Let’s walk back into the place that shaped us.',
+        },
+        {
+          label: 'The ones who guided us',
+          title: 'Teachers who<br />built our lives.',
+          subtitle:
+            'Their lessons went far beyond textbooks. Today we return to thank the mentors who shaped our character and our future.',
+        },
+        {
+          label: 'Grounds · Games · Glory',
+          title: 'Where we ran,<br />played & grew.',
+          subtitle:
+            'From morning PT to inter-house matches — the fields taught us teamwork, grit, and a joy that still lives in us.',
+        },
+        {
+          label: 'Classmates forever',
+          title: 'Same benches.<br />Lifelong friends.',
+          subtitle:
+            'Hostel nights, shared notes, and laughter that never left. The people who turned ordinary days into unforgettable ones.',
+        },
+        {
+          label: 'Grand Reunion 2026',
+          title: 'One day.<br />All of us home.',
+          subtitle:
+            'We come back not only to remember, but to give back — for the students who will walk these corridors after us.',
+        },
+      ];
+
+      const TOTAL = SLIDES.length;
       let current = 0;
+      let animating = false;
       const slides = [];
-      for (let i = 1; i <= TOTAL_IMAGES; i++) {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      for (let i = 0; i < TOTAL; i++) {
         const slide = document.createElement('div');
-        slide.className = 'hero-slide' + (i === 1 ? ' is-active' : '');
-        slide.innerHTML = `<img src="${BASE_PATH}image_${i}.jpeg" alt="Reunion memory ${i}" loading="${i === 1 ? 'eager' : 'lazy'}" />`;
+        slide.className = 'hero-slide' + (i === 0 ? ' is-active' : '');
+        slide.innerHTML = `<img src="${BASE_PATH}image_${i + 1}.jpeg" alt="${SLIDES[i].label}" loading="${i === 0 ? 'eager' : 'lazy'}" />`;
         slidesEl.appendChild(slide);
         slides.push(slide);
+
         if (dotsEl) {
           const dot = document.createElement('button');
           dot.type = 'button';
-          dot.setAttribute('aria-label', `Go to slide ${i}`);
-          if (i === 1) dot.classList.add('is-active');
-          dot.addEventListener('click', () => goTo(i - 1));
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}: ${SLIDES[i].label}`);
+          if (i === 0) dot.classList.add('is-active');
+          dot.addEventListener('click', () => goTo(i));
           dotsEl.appendChild(dot);
         }
       }
+
+      function applyText(index) {
+        const data = SLIDES[index];
+        if (labelTextEl) labelTextEl.textContent = data.label;
+        if (titleEl) titleEl.innerHTML = data.title;
+        if (subtitleEl) subtitleEl.textContent = data.subtitle;
+      }
+
+      function setCopyState(state) {
+        if (!copyEl) return;
+        copyEl.classList.remove('is-visible', 'is-leaving', 'is-entering');
+        if (state) copyEl.classList.add(state);
+      }
+
       function goTo(index) {
+        if (index === current || animating) return;
+        animating = true;
+
+        // Image + dots
         slides[current].classList.remove('is-active');
         if (dotsEl) dotsEl.children[current].classList.remove('is-active');
         current = index;
         slides[current].classList.add('is-active');
         if (dotsEl) dotsEl.children[current].classList.add('is-active');
+
+        // Text: fade out → swap → fade in
+        if (reduceMotion || !copyEl) {
+          applyText(current);
+          animating = false;
+          return;
+        }
+
+        setCopyState('is-leaving');
+        window.setTimeout(() => {
+          applyText(current);
+          setCopyState('is-entering');
+          // Force reflow so the enter transition runs
+          void copyEl.offsetWidth;
+          setCopyState('is-visible');
+          window.setTimeout(() => {
+            animating = false;
+          }, 480);
+        }, 420);
       }
+
       function next() {
-        goTo((current + 1) % TOTAL_IMAGES);
+        goTo((current + 1) % TOTAL);
       }
+
       let timer = setInterval(next, INTERVAL_MS);
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) clearInterval(timer);
         else timer = setInterval(next, INTERVAL_MS);
       });
+
+      // Ensure first slide text is applied (already in HTML, but keep in sync)
+      applyText(0);
     })();
   </script>
 
@@ -1413,30 +1847,29 @@
 
   <script type="module">
     import { initGallery } from './js/gallery.js';
-    import { applyLogoVisibility } from './js/site-brand.js';
+    import { SHOW_LOGO, applyLogoVisibility } from './js/site-brand.js';
+
     initGallery({ preview: true });
-    // One flag controls splash + header
+    // One flag controls splash + header logo visibility
     applyLogoVisibility('introLogo', 'introLogo_header');
-  </script>
 
-  <script>
-    (function () {
-      const STORAGE_KEY = 'reunion26_intro_seen';
-      const splash = document.getElementById('introSplash');
-      const logo = document.getElementById('introLogo');
-      const line = document.getElementById('introLine');
-      const headline = document.getElementById('introHeadline');
-      const sub = document.getElementById('introSub');
-      const skipBtn = document.getElementById('introSkip');
+    // ── Intro splash ──────────────────────────────────────
+    const STORAGE_KEY = 'reunion26_intro_seen';
+    const splash = document.getElementById('introSplash');
+    const logo = document.getElementById('introLogo');
+    const line = document.getElementById('introLine');
+    const headline = document.getElementById('introHeadline');
+    const sub = document.getElementById('introSub');
+    const skipBtn = document.getElementById('introSkip');
+    const countdownEl = document.getElementById('introCountdown');
+    const countNum = document.getElementById('introCountNum');
+    const confettiEl = document.getElementById('introConfetti');
 
-      if (!splash) return;
-
-      // Already seen
-      if (localStorage.getItem(STORAGE_KEY)) {
-        splash.remove();
-        return;
-      }
-
+    if (!splash) {
+      // nothing
+    } else if (localStorage.getItem(STORAGE_KEY)) {
+      splash.remove();
+    } else {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       let cancelled = false;
       const timers = [];
@@ -1451,7 +1884,7 @@
         if (cancelled) return;
         cancelled = true;
         timers.forEach(clearTimeout);
-        // localStorage.setItem(STORAGE_KEY, '1');
+        localStorage.setItem(STORAGE_KEY, '1');
         splash.classList.add('is-leaving');
         window.setTimeout(() => splash.remove(), 750);
       }
@@ -1464,23 +1897,133 @@
         }
       });
 
-      // Reduced motion: show final state briefly
-      if (reduceMotion) {
-        logo?.classList.add('is-in');
-        line?.classList.add('is-in');
-        headline?.classList.add('is-in');
-        sub?.classList.add('is-in');
-        later(finish, 1600);
-        return;
+      // ── Confetti burst ──────────────────────────────────
+      function burstConfetti() {
+        if (!confettiEl || reduceMotion) return;
+        const colors = ['#F5C84C', '#E85A4A', '#FFFFFF', '#3F7A5F', '#FFD166', '#F6F3EB'];
+        const count = 72;
+        const frag = document.createDocumentFragment();
+
+        for (let i = 0; i < count; i++) {
+          const piece = document.createElement('span');
+          const isRibbon = i % 3 === 0;
+          const size = isRibbon
+            ? 10 + Math.random() * 14
+            : 6 + Math.random() * 8;
+          const left = Math.random() * 100;
+          const drift = (Math.random() - 0.5) * 160;
+          const spin = (Math.random() > 0.5 ? 1 : -1) * (480 + Math.random() * 720);
+          const duration = 2.4 + Math.random() * 1.8;
+          const delay = Math.random() * 0.35;
+
+          piece.className = 'confetti-piece' + (isRibbon ? ' is-ribbon' : '');
+          piece.style.left = left + '%';
+          piece.style.width = (isRibbon ? 5 + Math.random() * 3 : size) + 'px';
+          piece.style.height = size + 'px';
+          piece.style.background = colors[i % colors.length];
+          piece.style.setProperty('--drift', drift + 'px');
+          piece.style.setProperty('--spin', spin + 'deg');
+          piece.style.animationDuration = duration + 's';
+          piece.style.animationDelay = delay + 's';
+          frag.appendChild(piece);
+        }
+
+        confettiEl.innerHTML = '';
+        confettiEl.appendChild(frag);
+
+        // Cleanup after animation
+        later(() => {
+          if (confettiEl) confettiEl.innerHTML = '';
+        }, 4500);
       }
 
-      // Sequence
-      later(() => logo?.classList.add('is-in'), 280);
-      later(() => line?.classList.add('is-in'), 1000);
-      later(() => headline?.classList.add('is-in'), 1500);
-      later(() => sub?.classList.add('is-in'), 2200);
-      later(finish, 5000);
-    })();
+      // ── Countdown step helper ───────────────────────────
+      function showCount(n) {
+        return new Promise((resolve) => {
+          if (!countNum || !countdownEl) {
+            resolve();
+            return;
+          }
+          countdownEl.classList.remove('hidden');
+          countNum.textContent = String(n);
+          countNum.classList.remove('is-out');
+          countNum.classList.remove('is-in');
+          void countNum.offsetWidth;
+          countNum.classList.add('is-in');
+
+          later(() => {
+            countNum.classList.remove('is-in');
+            countNum.classList.add('is-out');
+            later(resolve, 280);
+          }, 700);
+        });
+      }
+
+      function hideCountdown() {
+        countdownEl?.classList.add('hidden');
+      }
+
+      // ── Sequences ───────────────────────────────────────
+      async function runLogoRevealSequence() {
+        // Ensure logo is ready (not hidden) for the pop
+        logo?.classList.remove('hidden');
+        logo?.classList.remove('is-in', 'is-pop');
+        logo && (logo.style.opacity = '0');
+
+        if (reduceMotion) {
+          logo?.classList.add('is-in');
+          logo && (logo.style.opacity = '');
+          line?.classList.add('is-in');
+          headline?.classList.add('is-in');
+          sub?.classList.add('is-in');
+          later(finish, 1800);
+          return;
+        }
+
+        // 3 → 2 → 1
+        await showCount(3);
+        if (cancelled) return;
+        await showCount(2);
+        if (cancelled) return;
+        await showCount(1);
+        if (cancelled) return;
+        hideCountdown();
+
+        // Logo pop + confetti
+        later(() => {
+          if (cancelled) return;
+          logo && (logo.style.opacity = '');
+          logo?.classList.add('is-pop', 'is-in');
+          burstConfetti();
+        }, 120);
+
+        later(() => line?.classList.add('is-in'), 900);
+        later(() => headline?.classList.add('is-in'), 1400);
+        later(() => sub?.classList.add('is-in'), 2000);
+        later(finish, 5200);
+      }
+
+      function runTextOnlySequence() {
+        // Logo stays hidden (SHOW_LOGO = false)
+        if (reduceMotion) {
+          line?.classList.add('is-in');
+          headline?.classList.add('is-in');
+          sub?.classList.add('is-in');
+          later(finish, 1600);
+          return;
+        }
+        later(() => line?.classList.add('is-in'), 400);
+        later(() => headline?.classList.add('is-in'), 900);
+        later(() => sub?.classList.add('is-in'), 1500);
+        later(finish, 4200);
+      }
+
+      if (SHOW_LOGO) {
+        runLogoRevealSequence();
+      } else {
+        runTextOnlySequence();
+      }
+    }
   </script>
 
   <script type="module">

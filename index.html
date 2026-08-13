@@ -1884,7 +1884,7 @@
         if (cancelled) return;
         cancelled = true;
         timers.forEach(clearTimeout);
-        // localStorage.setItem(STORAGE_KEY, '1');
+        localStorage.setItem(STORAGE_KEY, '1');
         splash.classList.add('is-leaving');
         window.setTimeout(() => splash.remove(), 750);
       }

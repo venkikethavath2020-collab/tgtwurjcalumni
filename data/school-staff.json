@@ -1,0 +1,37 @@
+{
+    "teachers": [
+      { "id": 1, "name": "Ananth Reddy", "role": "PET", "phone": "9441015541" },
+      { "id": 2, "name": "Ashok", "role": "Social", "phone": "9652985429" },
+      { "id": 3, "name": "Prem Sagar", "role": "English", "phone": "7842798318" },
+      { "id": 4, "name": "Pramod Reddy", "role": "Maths", "phone": "9849558771" },
+      { "id": 5, "name": "Pandari", "role": "", "phone": "9849232159" },
+      { "id": 6, "name": "Narahari", "role": "Hindi", "phone": "9652674457" },
+      { "id": 7, "name": "Naresh", "role": "Telugu", "phone": "9398346538" },
+      { "id": 8, "name": "Krishna", "role": "Maths", "phone": "9441901019" },
+      { "id": 9, "name": "Jhansi", "role": "English", "phone": "9441105758" },
+      { "id": 10, "name": "Srinivas", "role": "English", "phone": "9441105738" },
+      { "id": 11, "name": "Balwant Reddy", "role": "", "phone": "9704488793" },
+      { "id": 12, "name": "Gopal", "role": "Maths", "phone": "9949848906" },
+      { "id": 13, "name": "Madhavi", "role": "Science", "phone": "6281305099" },
+      { "id": 14, "name": "Amarnath", "role": "", "phone": "9032560087" },
+      { "id": 15, "name": "Venkataiah", "role": "Maths", "phone": "9849237238" },
+      { "id": 16, "name": "Venkat Narayana", "role": "Maths", "phone": "9346436829" },
+      { "id": 17, "name": "Zaheedha", "role": "Hindi", "phone": "9440097164" },
+      { "id": 18, "name": "Sumathi", "role": "Biology", "phone": "8074322428" },
+      { "id": 19, "name": "Gaddam Venkateshwarlu", "role": "PD", "phone": "9177737883" },
+      { "id": 20, "name": "Bindu", "role": "Physics", "phone": "9177942309" },
+      { "id": 21, "name": "Anji Reddy", "role": "Maths", "phone": "9441736778" },
+      { "id": 22, "name": "Chary", "role": "Telugu", "phone": "9491376206" },
+      { "id": 23, "name": "Savitri", "role": "", "phone": "9704642769" },
+      { "id": 24, "name": "Kavitha", "role": "", "phone": "9492504734" }
+    ],
+    "workers": [
+      { "id": 1, "name": "Shanti", "role": "Nurse", "phone": "8179860269" },
+      { "id": 2, "name": "Sadanand", "role": "Attender", "phone": "9866134320" },
+      { "id": 3, "name": "Narsimlu", "role": "Watchman", "phone": "9490866237" },
+      { "id": 4, "name": "Kishan", "role": "Mess Worker", "phone": "9959402964" },
+      { "id": 5, "name": "Mallamma", "role": "Mess Worker", "phone": "9441822513" },
+      { "id": 6, "name": "Tukaram", "role": "Mess Worker", "phone": "9989118457" },
+      { "id": 7, "name": "Mutyalu", "role": "Mess Worker", "phone": "8179528422" }
+    ]
+  }

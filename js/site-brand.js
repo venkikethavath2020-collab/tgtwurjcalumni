@@ -38,9 +38,9 @@ export function initSiteBrand(target, options = {}) {
 }
 
 export function applyLogoVisibility(...targets) {
-    targets.forEach((t) => {
-      const el = typeof t === 'string' ? document.getElementById(t) : t;
-      if (!el) return;
-      el.classList.toggle('hidden', !SHOW_LOGO);
-    });
-  }
+  targets.forEach((t) => {
+    const el = typeof t === 'string' ? document.getElementById(t) : t;
+    if (!el) return;
+    el.classList.toggle('hidden', !SHOW_LOGO);
+  });
+}

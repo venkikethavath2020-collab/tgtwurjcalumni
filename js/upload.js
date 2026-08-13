@@ -12,6 +12,10 @@ const validTypes = [
 const maxOriginalBytes = 25 * 1024 * 1024;
 const MAX_FILES = 10;
 
+// Hardcoded — same value the gate checks. Sent to the worker on every upload.
+// Change here (and in upload.html gate) if the code is ever rotated.
+const UPLOAD_ACCESS_CODE = "#TGTWURJC#";
+
 export function initUpload() {
   const input = document.getElementById("photoInput");
   const zone = document.getElementById("dropZone");
@@ -29,7 +33,6 @@ export function initUpload() {
   const progressPercent = document.getElementById("progressPercent");
   const progressDetail = document.getElementById("progressDetail");
 
-  const accessCodeInput = form?.querySelector('[name="accessCode"]');
   const nameInput = form?.querySelector('[name="name"]');
   const batchSelect = form?.querySelector('[name="batch"]');
 
@@ -37,15 +40,14 @@ export function initUpload() {
 
   let selected = [];
 
-  // ── Validate required fields + files ───────────────────
+  // ── Validate required fields + files (no access code — gate already passed)
   const updateButtonState = () => {
     if (!btn) return;
-    const hasCode = accessCodeInput?.value.trim().length > 0;
     const hasName = nameInput?.value.trim().length > 0;
     const hasBatch = batchSelect?.value.trim().length > 0;
     const hasFiles = selected.length > 0;
 
-    btn.disabled = !(hasCode && hasName && hasBatch && hasFiles);
+    btn.disabled = !(hasName && hasBatch && hasFiles);
   };
 
   const setLoading = (loading) => {
@@ -97,7 +99,6 @@ export function initUpload() {
   };
 
   // Listen for required field changes
-  accessCodeInput?.addEventListener("input", updateButtonState);
   nameInput?.addEventListener("input", updateButtonState);
   batchSelect?.addEventListener("change", updateButtonState);
 
@@ -174,15 +175,9 @@ export function initUpload() {
       return;
     }
 
-    const accessCode = form.accessCode.value.trim();
     const name = form.name.value.trim();
     const batch = form.batch.value.trim();
 
-    if (!accessCode) {
-      showMessage("Please enter the upload access code.");
-      accessCodeInput?.focus();
-      return;
-    }
     if (!name) {
       showMessage("Please enter your name.");
       nameInput?.focus();
@@ -202,8 +197,9 @@ export function initUpload() {
     clearMessage();
     setProgress(0, "Starting…", `0 of ${selected.length} photos`);
 
+    // Access code is hardcoded — gate already verified the user on this page
     const metadata = {
-      accessCode,
+      accessCode: UPLOAD_ACCESS_CODE,
       name,
       batch,
       caption: form.caption.value.trim(),
@@ -249,10 +245,9 @@ export function initUpload() {
       } catch (error) {
         failed++;
         complete++;
-        // Show server error message if available (e.g. invalid code)
         const msg = error?.message || "";
         if (msg.toLowerCase().includes("access code") || msg.includes("403")) {
-          showMessage("Invalid upload access code. Please check with the committee.");
+          showMessage("Upload was rejected by the server. Please contact the committee.");
         }
         setProgress(
           (complete / total) * 100,
@@ -296,9 +291,7 @@ export function initUpload() {
       }, 2200);
     } else {
       hideProgress();
-      if (!message.textContent || message.textContent.includes("Invalid")) {
-        // keep existing invalid-code message if already shown
-      } else {
+      if (!message.textContent) {
         showMessage("None of the photos could be uploaded. Please try again.");
       }
     }

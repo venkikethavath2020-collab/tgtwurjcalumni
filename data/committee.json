@@ -1,0 +1,72 @@
+{
+    "organizer": {
+      "name": "Vamshi",
+      "batch": "2009",
+      "phone": "9553548429",
+      "photo": "assets/vamsi.jpeg",
+      "label": "Organizer & convener"
+    },
+    "batches": [
+      {
+        "year": "2007",
+        "members": [
+          { "name": "Pruthvi Raj", "phone": "9440106080" },
+          { "name": "Manohar", "phone": "9704238720" },
+          { "name": "Mahesh", "phone": "9674818882" },
+          { "name": "Vinod", "phone": "7336764737" },
+          { "name": "Boddupally Kiran", "phone": "9494494860" }
+        ]
+      },
+      {
+        "year": "2008",
+        "members": [
+          { "name": "Lal Singh", "phone": "8500836580" },
+          { "name": "Nagaraj", "phone": "8340934212" },
+          { "name": "Kailash", "phone": "9494523600" },
+          { "name": "Kasna", "phone": "9642898672" },
+          { "name": "Kishore", "phone": "9490018971" },
+          { "name": "Ganesh", "phone": "9906886840" }
+        ]
+      },
+      {
+        "year": "2009",
+        "members": [
+          { "name": "Ramdas", "phone": "9010806571" },
+          { "name": "Soma", "phone": "9603385606" },
+          { "name": "Pruthvi Raj", "phone": "9492581632" },
+          { "name": "Karthik", "phone": "9502208595" },
+          { "name": "Naresh", "phone": "6305857946" },
+          { "name": "Gopal", "phone": "9390000284" }
+        ]
+      },
+      {
+        "year": "2010",
+        "members": [
+          { "name": "Hari Prasad", "phone": "9666386708" },
+          { "name": "Vijay", "phone": "9398058292" },
+          { "name": "Srinivas", "phone": "8331996536" }
+        ]
+      },
+      {
+        "year": "2011",
+        "members": [
+          { "name": "Kiran", "phone": "8106373109" },
+          { "name": "Ganesh", "phone": "9573730448" }
+        ]
+      },
+      {
+        "year": "2012",
+        "members": [
+          { "name": "Devuja", "phone": "9989629741" },
+          { "name": "Rajesh", "phone": "9912238755" },
+          { "name": "Vinay", "phone": "7659996124" }
+        ]
+      },
+      {
+        "year": "2013",
+        "members": [
+          { "name": "Sreenu", "phone": "8179772962" }
+        ]
+      }
+    ]
+  }

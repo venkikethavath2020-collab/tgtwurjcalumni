@@ -4,7 +4,7 @@ export const SHOW_LOGO = true;
 // ─────────────────────────────────────────────
 
 /**
- * Renders the site brand (logo + Reunion '26) into a container.
+ * Renders the site brand (logo + TGTWURJC Alumni) into a container.
  *
  * @param {string | HTMLElement} target - CSS selector or element
  * @param {object} [options]
@@ -31,7 +31,7 @@ export function initSiteBrand(target, options = {}) {
         class="site-brand-logo h-8 w-8 object-contain sm:h-9 sm:w-9 ${SHOW_LOGO ? '' : 'hidden'}"
       />
       <span>
-        Reunion <span class="text-sun">'26</span>
+        TGTWURJC <span class="text-sun">Alumni</span>
       </span>
     </a>
   `;

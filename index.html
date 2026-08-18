@@ -8,6 +8,7 @@
   <title>TGTWURJC Alumni Association</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -1390,6 +1391,31 @@
           </div>
         </div>
 
+        <!-- Charts -->
+        <div class="grid gap-6 lg:grid-cols-2">
+          <div class="rounded-2xl border border-ink/8 bg-mist/30 p-4 sm:p-5">
+            <h3 class="font-display text-base font-bold text-ink">Funds overview</h3>
+            <p class="mt-0.5 text-xs text-muted">Received · Spent · Balance</p>
+            <div class="relative mx-auto mt-3 h-52 max-w-[260px] sm:h-56">
+              <canvas id="budgetOverviewChart" aria-label="Funds overview chart"></canvas>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-ink/8 bg-mist/30 p-4 sm:p-5">
+            <h3 class="font-display text-base font-bold text-ink">Contributions by batch</h3>
+            <p class="mt-0.5 text-xs text-muted">Money received · 2007–2013</p>
+            <div class="relative mt-3 h-52 sm:h-56">
+              <canvas id="budgetBatchChart" aria-label="Batch contributions chart"></canvas>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-ink/8 bg-mist/30 p-4 sm:p-5 lg:col-span-2">
+            <h3 class="font-display text-base font-bold text-ink">Top expenses</h3>
+            <p class="mt-0.5 text-xs text-muted">Highest spend items (₹)</p>
+            <div class="relative mt-3 h-64 sm:h-72">
+              <canvas id="budgetExpenseChart" aria-label="Top expenses chart"></canvas>
+            </div>
+          </div>
+        </div>
+
         <!-- Money received -->
         <div>
           <h3 class="font-display text-lg font-bold text-ink">Money received</h3>
@@ -1740,11 +1766,210 @@
       const budgetBtn = document.getElementById('budgetDetailsBtn');
       const closeBudget = document.getElementById('closeBudget');
 
+      let chartsReady = false;
+      let overviewChart, batchChart, expenseChart;
+
+      const INK = '#0F2E2D';
+      const CORAL = '#E85A4A';
+      const SUN = '#F5C84C';
+      const MUTED = '#5C6B6A';
+      const LEAF = '#3F7A5F';
+
+      const batchLabels = ['2007', '2008', '2009', '2010', '2011', '2012', '2013'];
+      const batchValues = [41000, 24000, 30000, 21000, 31000, 20000, 19300];
+
+      const expenseItems = [
+        { label: 'Food', value: 40000 },
+        { label: 'Tent', value: 22000 },
+        { label: 'Plants', value: 11000 },
+        { label: 'Photography', value: 8000 },
+        { label: 'Pens', value: 7750 },
+        { label: 'Mementos', value: 7000 },
+        { label: 'Sweets', value: 6000 },
+        { label: 'Student Gift', value: 4560 },
+        { label: 'Badges', value: 4300 },
+        { label: 'Sound', value: 4000 },
+      ];
+
+      function rupee(n) {
+        return '₹' + Number(n).toLocaleString('en-IN');
+      }
+
+      function initCharts() {
+        if (chartsReady || typeof Chart === 'undefined') return;
+        chartsReady = true;
+
+        const overviewEl = document.getElementById('budgetOverviewChart');
+        const batchEl = document.getElementById('budgetBatchChart');
+        const expenseEl = document.getElementById('budgetExpenseChart');
+        if (!overviewEl || !batchEl || !expenseEl) return;
+
+        const centerPlugin = {
+          id: 'centerText',
+          afterDraw(chart) {
+            if (chart.canvas.id !== 'budgetOverviewChart') return;
+            const { ctx, chartArea } = chart;
+            if (!chartArea) return;
+            const cx = (chartArea.left + chartArea.right) / 2;
+            const cy = (chartArea.top + chartArea.bottom) / 2;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = MUTED;
+            ctx.font = '600 11px Inter, system-ui, sans-serif';
+            ctx.fillText('RECEIVED', cx, cy - 12);
+            ctx.fillStyle = INK;
+            ctx.font = '700 16px Georgia, serif';
+            ctx.fillText('₹1,86,300', cx, cy + 10);
+            ctx.restore();
+          },
+        };
+        if (!Chart.registry.plugins.get('centerText')) {
+          Chart.register(centerPlugin);
+        }
+
+        overviewChart = new Chart(overviewEl, {
+          type: 'doughnut',
+          data: {
+            labels: ['Spent', 'Balance'],
+            datasets: [{
+              data: [135348, 50952],
+              backgroundColor: [CORAL, SUN],
+              borderColor: '#ffffff',
+              borderWidth: 3,
+              hoverOffset: 6,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  color: INK,
+                  font: { family: 'Inter, system-ui, sans-serif', size: 12, weight: '600' },
+                  padding: 16,
+                  usePointStyle: true,
+                  pointStyle: 'circle',
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ' ' + ctx.label + ': ' + rupee(ctx.raw),
+                },
+              },
+            },
+          },
+        });
+
+        batchChart = new Chart(batchEl, {
+          type: 'bar',
+          data: {
+            labels: batchLabels,
+            datasets: [{
+              label: 'Contribution',
+              data: batchValues,
+              backgroundColor: batchValues.map((_, i) =>
+                i % 2 === 0 ? CORAL : SUN
+              ),
+              borderRadius: 8,
+              borderSkipped: false,
+              maxBarThickness: 36,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ' ' + rupee(ctx.raw),
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  color: MUTED,
+                  font: { family: 'Inter, system-ui, sans-serif', size: 11, weight: '600' },
+                },
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(15,46,45,0.06)' },
+                ticks: {
+                  color: MUTED,
+                  font: { family: 'Inter, system-ui, sans-serif', size: 10 },
+                  callback: (v) => '₹' + (v >= 1000 ? (v / 1000) + 'k' : v),
+                },
+              },
+            },
+          },
+        });
+
+        expenseChart = new Chart(expenseEl, {
+          type: 'bar',
+          data: {
+            labels: expenseItems.map((e) => e.label),
+            datasets: [{
+              label: 'Expense',
+              data: expenseItems.map((e) => e.value),
+              backgroundColor: LEAF,
+              borderRadius: 6,
+              borderSkipped: false,
+              maxBarThickness: 28,
+            }],
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ' ' + rupee(ctx.raw),
+                },
+              },
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: { color: 'rgba(15,46,45,0.06)' },
+                ticks: {
+                  color: MUTED,
+                  font: { family: 'Inter, system-ui, sans-serif', size: 10 },
+                  callback: (v) => '₹' + (v >= 1000 ? (v / 1000) + 'k' : v),
+                },
+              },
+              y: {
+                grid: { display: false },
+                ticks: {
+                  color: INK,
+                  font: { family: 'Inter, system-ui, sans-serif', size: 11, weight: '600' },
+                },
+              },
+            },
+          },
+        });
+      }
+
       function openBudget() {
         if (!budgetModal) return;
         budgetModal.classList.remove('hidden');
         budgetModal.classList.add('flex');
         document.body.style.overflow = 'hidden';
+        // Charts need visible canvas size
+        requestAnimationFrame(() => {
+          initCharts();
+          overviewChart?.resize();
+          batchChart?.resize();
+          expenseChart?.resize();
+        });
       }
 
       function closeBudgetModal() {

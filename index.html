@@ -370,7 +370,7 @@
         <a class="transition hover:text-sun" href="#alumni">Alumni</a>
         <a class="transition hover:text-sun" href="#students">Students</a>
         <a class="rounded-full border border-sun/60 px-3.5 py-1.5 text-sun transition hover:bg-sun hover:text-ink"
-          href="#gallery">Gallery</a>
+          href="gallery">Gallery</a>
         <a class="transition hover:text-sun" href="#join">Join</a>
       </div>
 
@@ -428,7 +428,7 @@
           <a data-close-menu class="rounded-xl px-4 py-3 transition hover:bg-white/10 hover:text-sun"
             href="#students">Students</a>
           <a data-close-menu class="rounded-xl px-4 py-3 text-sun transition hover:bg-white/10"
-            href="#gallery">Gallery</a>
+            href="gallery">Gallery</a>
           <a data-close-menu class="rounded-xl px-4 py-3 transition hover:bg-white/10 hover:text-sun"
             href="#join">Join</a>
         </div>
@@ -542,7 +542,7 @@
             <p class="mt-7 text-base leading-8 text-muted sm:text-lg">
               We bring together former students of
               <strong class="font-semibold text-ink">
-                Telangana Tribal Welfare Residential Upgraded Junior College, Jinnaram
+                Telangana Tribal Welfare Upgraded Residential Junior College, Jinnaram
               </strong>
               — across every batch and year — to stay connected, support one another,
               and give back to the campus that shaped us.
@@ -666,14 +666,14 @@
           </p>
 
           <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <a href="#gallery"
+            <a href="gallery"
               class="rounded-full bg-sun px-6 py-3 text-sm font-bold text-ink transition hover:bg-white">
               View reunion gallery
             </a>
-            <a href="upload/"
-              class="rounded-full border border-white/25 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">
-              Upload your photos
-            </a>
+            <button type="button" id="budgetDetailsBtn"
+              class="rounded-full border border-sun/50 bg-white/5 px-6 py-3 text-sm font-bold text-sun transition hover:bg-sun hover:text-ink">
+              Budget details
+            </button>
           </div>
         </div>
       </div>
@@ -1030,7 +1030,7 @@
               TGTWURJC, Jinnaram
             </h2>
             <p class="mt-5 text-base leading-8 text-muted sm:text-lg">
-              Telangana Tribal Welfare Residential Upgraded Junior College has nurtured generations through
+              Telangana Tribal Welfare Upgraded Residential Junior College has nurtured generations through
               <span class="font-semibold text-ink">quality education, discipline, values, and character</span>.
               For every alumni, this campus is where lifelong friendships began.
             </p>
@@ -1351,6 +1351,131 @@
     </div>
   </footer>
 
+  <!-- Budget details modal -->
+  <div id="budgetModal"
+    class="fixed inset-0 z-50 hidden items-end justify-center bg-ink/60 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+    role="dialog" aria-modal="true" aria-labelledby="budgetTitle">
+    <div
+      class="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-2xl bg-white shadow-lift ring-1 ring-ink/5 sm:rounded-2xl">
+      <div
+        class="sticky top-0 z-10 flex items-start justify-between border-b border-ink/8 bg-white/95 px-6 py-5 backdrop-blur-md sm:px-8">
+        <div>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-coral">18 August 2026</p>
+          <h2 id="budgetTitle" class="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+            Event budget detail
+          </h2>
+          <p class="mt-1 text-sm text-muted">Grand Reunion 2026 · Working Organizing Committee</p>
+        </div>
+        <button type="button" id="closeBudget"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-mist text-ink/50 transition hover:bg-ink/10 hover:text-ink"
+          aria-label="Close budget">
+          <span class="text-xl leading-none">&times;</span>
+        </button>
+      </div>
+
+      <div class="space-y-8 p-6 sm:p-8">
+        <!-- Summary cards -->
+        <div class="grid gap-3 sm:grid-cols-3">
+          <div class="rounded-2xl border border-ink/8 bg-mist/60 p-4 text-center">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-muted">Received</p>
+            <p class="mt-1 text-2xl font-bold text-ink">₹1,86,300</p>
+          </div>
+          <div class="rounded-2xl border border-ink/8 bg-mist/60 p-4 text-center">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-muted">Spent</p>
+            <p class="mt-1 text-2xl font-bold text-ink">₹1,35,348</p>
+          </div>
+          <div class="rounded-2xl border border-sun/40 bg-[#FFF9EB] p-4 text-center">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-coral">Balance</p>
+            <p class="mt-1 text-2xl font-bold text-ink">₹50,952</p>
+          </div>
+        </div>
+
+        <!-- Money received -->
+        <div>
+          <h3 class="font-display text-lg font-bold text-ink">Money received</h3>
+          <p class="mt-1 text-xs text-muted">Contributions by batch</p>
+          <div class="mt-4 overflow-hidden rounded-xl border border-ink/8">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-ink text-white">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold">S.No</th>
+                  <th class="px-4 py-2.5 font-semibold">Batch</th>
+                  <th class="px-4 py-2.5 text-right font-semibold">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-ink/8">
+                <tr class="bg-white"><td class="px-4 py-2.5 text-muted">1</td><td class="px-4 py-2.5 font-medium">2007</td><td class="px-4 py-2.5 text-right tabular-nums">₹41,000</td></tr>
+                <tr class="bg-mist/40"><td class="px-4 py-2.5 text-muted">2</td><td class="px-4 py-2.5 font-medium">2008</td><td class="px-4 py-2.5 text-right tabular-nums">₹24,000</td></tr>
+                <tr class="bg-white"><td class="px-4 py-2.5 text-muted">3</td><td class="px-4 py-2.5 font-medium">2009</td><td class="px-4 py-2.5 text-right tabular-nums">₹30,000</td></tr>
+                <tr class="bg-mist/40"><td class="px-4 py-2.5 text-muted">4</td><td class="px-4 py-2.5 font-medium">2010</td><td class="px-4 py-2.5 text-right tabular-nums">₹21,000</td></tr>
+                <tr class="bg-white"><td class="px-4 py-2.5 text-muted">5</td><td class="px-4 py-2.5 font-medium">2011</td><td class="px-4 py-2.5 text-right tabular-nums">₹31,000</td></tr>
+                <tr class="bg-mist/40"><td class="px-4 py-2.5 text-muted">6</td><td class="px-4 py-2.5 font-medium">2012</td><td class="px-4 py-2.5 text-right tabular-nums">₹20,000</td></tr>
+                <tr class="bg-white"><td class="px-4 py-2.5 text-muted">7</td><td class="px-4 py-2.5 font-medium">2013</td><td class="px-4 py-2.5 text-right tabular-nums">₹19,300</td></tr>
+                <tr class="bg-ink text-white">
+                  <td class="px-4 py-2.5" colspan="2"><strong>Total</strong></td>
+                  <td class="px-4 py-2.5 text-right font-bold tabular-nums">₹1,86,300</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Expenditure -->
+        <div>
+          <h3 class="font-display text-lg font-bold text-ink">Expenditure</h3>
+          <p class="mt-1 text-xs text-muted">Event expenses · 20 line items</p>
+          <div class="mt-4 overflow-x-auto overflow-hidden rounded-xl border border-ink/8">
+            <table class="w-full min-w-[520px] text-left text-sm">
+              <thead class="bg-ink text-white">
+                <tr>
+                  <th class="px-3 py-2.5 font-semibold sm:px-4">#</th>
+                  <th class="px-3 py-2.5 font-semibold sm:px-4">Item</th>
+                  <th class="px-3 py-2.5 text-right font-semibold sm:px-4">Price</th>
+                  <th class="hidden px-3 py-2.5 font-semibold sm:table-cell sm:px-4">Remarks</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-ink/8">
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">1</td><td class="px-3 py-2 font-medium sm:px-4">Tent</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹22,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">Late services fine ₹2,000</td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">2</td><td class="px-3 py-2 font-medium sm:px-4">Food</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹40,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">Extra food &amp; chutney ₹1,000</td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">3</td><td class="px-3 py-2 font-medium sm:px-4">Mementos</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹7,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">Courier ₹500</td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">4</td><td class="px-3 py-2 font-medium sm:px-4">Pens</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹7,750</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">5</td><td class="px-3 py-2 font-medium sm:px-4">Plants</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹11,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">6</td><td class="px-3 py-2 font-medium sm:px-4">Badges</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹4,300</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">7</td><td class="px-3 py-2 font-medium sm:px-4">Banner and Logo</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹3,390</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">8</td><td class="px-3 py-2 font-medium sm:px-4">Sweets</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹6,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">9</td><td class="px-3 py-2 font-medium sm:px-4">Shawls</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹3,300</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">10</td><td class="px-3 py-2 font-medium sm:px-4">Photography</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹8,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">11</td><td class="px-3 py-2 font-medium sm:px-4">Sound System</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹4,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">12</td><td class="px-3 py-2 font-medium sm:px-4">Student Gift</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹4,560</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">16 files + 16 pads + 16 gift boxes</td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">13</td><td class="px-3 py-2 font-medium sm:px-4">Non-Teaching Gift</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹1,968</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">20 sets</td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">14</td><td class="px-3 py-2 font-medium sm:px-4">Student Chicken</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹3,330</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">15 kg × ₹222/kg</td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">15</td><td class="px-3 py-2 font-medium sm:px-4">Plates, Glass &amp; Water Bottles</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹3,600</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">16</td><td class="px-3 py-2 font-medium sm:px-4">Water Cans</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹2,800</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4">35 cans</td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">17</td><td class="px-3 py-2 font-medium sm:px-4">Flowers</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹1,000</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">18</td><td class="px-3 py-2 font-medium sm:px-4">Plants (courier)</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹750</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-white"><td class="px-3 py-2 text-muted sm:px-4">19</td><td class="px-3 py-2 font-medium sm:px-4">Catering Boys</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹200</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-mist/40"><td class="px-3 py-2 text-muted sm:px-4">20</td><td class="px-3 py-2 font-medium sm:px-4">Mallamma Cleaning</td><td class="px-3 py-2 text-right tabular-nums sm:px-4">₹400</td><td class="hidden px-3 py-2 text-xs text-muted sm:table-cell sm:px-4"></td></tr>
+                <tr class="bg-ink text-white">
+                  <td class="px-3 py-2.5 sm:px-4" colspan="2"><strong>Total</strong></td>
+                  <td class="px-3 py-2.5 text-right font-bold tabular-nums sm:px-4">₹1,35,348</td>
+                  <td class="hidden sm:table-cell"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-sun/40 bg-[#FFF9EB] px-5 py-4 text-center sm:text-left">
+          <p class="text-sm leading-6 text-ink/80">
+            <strong class="text-ink">Balance with Working Committee:</strong>
+            <span class="text-xl font-bold text-ink"> ₹50,952</span>
+          </p>
+          <p class="mt-2 text-xs text-muted">As reported by the Working Organizing Committee · 18 August 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Contact Modal (theme-aligned) -->
   <div id="contactModal"
     class="fixed inset-0 z-50 hidden items-end justify-center bg-ink/60 p-0 backdrop-blur-sm sm:items-center sm:p-6"
@@ -1588,7 +1713,14 @@
       if (e.key !== 'Escape') return;
       const contactModal = document.getElementById('contactModal');
       const staffModal = document.getElementById('staffModal');
+      const budgetModal = document.getElementById('budgetModal');
 
+      if (budgetModal?.classList.contains('flex')) {
+        budgetModal.classList.add('hidden');
+        budgetModal.classList.remove('flex');
+        document.body.style.overflow = '';
+        return;
+      }
       if (staffModal?.classList.contains('flex')) {
         staffModal.classList.add('hidden');
         staffModal.classList.remove('flex');
@@ -1602,6 +1734,34 @@
       }
     });
   </script>
+  <script>
+    (function () {
+      const budgetModal = document.getElementById('budgetModal');
+      const budgetBtn = document.getElementById('budgetDetailsBtn');
+      const closeBudget = document.getElementById('closeBudget');
+
+      function openBudget() {
+        if (!budgetModal) return;
+        budgetModal.classList.remove('hidden');
+        budgetModal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeBudgetModal() {
+        if (!budgetModal) return;
+        budgetModal.classList.add('hidden');
+        budgetModal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+
+      budgetBtn?.addEventListener('click', openBudget);
+      closeBudget?.addEventListener('click', closeBudgetModal);
+      budgetModal?.addEventListener('click', (e) => {
+        if (e.target === budgetModal) closeBudgetModal();
+      });
+    })();
+  </script>
+
 
   <script>
     (function () {

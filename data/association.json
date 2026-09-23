@@ -1,0 +1,137 @@
+{
+    "association": {
+      "name": "TGTWURJC Jinnaram Alumni Association",
+      "year": 2026,
+      "members": [
+        {
+          "s_no": 1,
+          "post": "President",
+          "members": [{ "name": "Prashant V", "batch": "2008" }]
+        },
+        {
+          "s_no": 2,
+          "post": "Vice President",
+          "members": [{ "name": "Vamshi R", "batch": "2009" }]
+        },
+        {
+          "s_no": 3,
+          "post": "General Secretary",
+          "members": [
+            { "name": "Sai Kuruparaj", "batch": "2007" },
+            { "name": "Vinod S", "batch": "2010" }
+          ]
+        },
+        {
+          "s_no": 4,
+          "post": "Joint Secretary",
+          "members": [
+            { "name": "Bhasker R", "batch": "2010" },
+            { "name": "P Srinu", "batch": "2013" }
+          ]
+        },
+        {
+          "s_no": 5,
+          "post": "Treasurer",
+          "members": [
+            { "name": "Soma", "batch": "2009" },
+            { "name": "Ganesh E", "batch": "2011" }
+          ]
+        },
+        {
+          "s_no": 6,
+          "post": "Joint Treasurer",
+          "members": [
+            { "name": "M Ravi", "batch": "2008" },
+            { "name": "Shankar V", "batch": "2012" }
+          ]
+        },
+        {
+          "s_no": 7,
+          "post": "Event Coordinator 1",
+          "members": [
+            { "name": "Ramdas M", "batch": "2009" },
+            { "name": "Jeevan B", "batch": "2011" }
+          ]
+        },
+        {
+          "s_no": 8,
+          "post": "Event Coordinator 2",
+          "members": [
+            { "name": "Kranthi D", "batch": "2008" },
+            { "name": "Gopal K", "batch": "2012" }
+          ]
+        },
+        {
+          "s_no": 9,
+          "post": "PR & Media Head",
+          "members": [
+            { "name": "Any Journalist From Our Alumni", "batch": null },
+            { "name": "Rajesh/Bharath", "batch": "2012" }
+          ]
+        },
+        {
+          "s_no": 10,
+          "post": "School Association Member",
+          "members": [
+            { "name": "Pradeep M", "batch": "2008" },
+            { "name": "N Ashok", "batch": "2011" }
+          ]
+        },
+        {
+          "s_no": 11,
+          "post": "Alumni Connect Head",
+          "members": [
+            { "name": "Rajender G", "location": "NZB", "batch": "2007" },
+            { "name": "Kasna K", "location": "NLG", "batch": "2008" },
+            { "name": "Vijay K", "location": "MDK", "batch": "2009" },
+            { "name": "Niranjan", "location": "R.R", "batch": "2010" },
+            { "name": "Devuja", "location": "MBNR", "batch": "2012" }
+          ]
+        },
+        {
+          "s_no": 13,
+          "post": "Discipline & Ethics Committee",
+          "members": [
+            { "name": "Madhu Mohan Reddy", "batch": "2007" },
+            { "name": "K Ramesh", "batch": "2008" },
+            { "name": "Hariprasad R", "batch": "2010" },
+            { "name": "Anil K", "batch": "2011" },
+            { "name": "Srinu M", "batch": "2013" }
+          ]
+        },
+        {
+          "s_no": 14,
+          "post": "Advisory Committee (Admin)",
+          "members": [
+            { "name": "G Manohar", "batch": "2007" },
+            { "name": "Lalsingh B", "batch": "2008" },
+            { "name": "Prudvi Raj P", "batch": "2009" },
+            { "name": "J Ravi Teja M", "batch": "2010" },
+            { "name": "Chandrashekar", "batch": "2012" },
+            { "name": "Tukaram", "batch": "2013" }
+          ]
+        },
+        {
+          "s_no": 15,
+          "post": "Advisory Committee (Technical)",
+          "members": [
+            { "name": "B Ramesh", "batch": "2007", "profession": "Sports Men" },
+            { "name": "Prudviraj D", "batch": "2007", "profession": "WAPCOS" },
+            { "name": "Praveen K", "batch": "2007", "profession": "State Govt. Employee" },
+            { "name": "Surender K", "batch": "2008", "profession": "SSC JE" },
+            { "name": "Dr. Mothilal", "batch": null, "qualification": "M.Tech Ph.D" },
+            { "name": "Vinod K", "batch": "2009", "profession": "Contractor Civil" },
+            { "name": "Harish Yadav", "batch": null, "profession": "C.A" },
+            { "name": "Vishnu", "batch": null, "profession": "Advocate High Court" },
+            { "name": "B Ramesh", "batch": "2011", "profession": "Deputy Manager, MIDHANI" },
+            { "name": "Vinay", "batch": "2012", "profession": "Cinematography" },
+            { "name": "Venkatesh", "batch": "2012", "profession": "Software Engineer" },
+            { "name": "M Hanmanthu", "batch": null, "profession": "Indian Army" }
+          ]
+        }
+      ],
+      "notes": [
+        "Other Technical Supporters & Doctors from alumni are to be added"
+      ]
+    }
+  }

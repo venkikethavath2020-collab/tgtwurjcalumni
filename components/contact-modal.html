@@ -1,0 +1,70 @@
+<!-- Contact Modal — Filterable Committee UI (reusable component) -->
+<div
+  id="contactModal"
+  class="fixed inset-0 z-50 hidden items-end justify-center bg-ink/60 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contactTitle"
+>
+  <div
+    class="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-lift ring-1 ring-ink/5 sm:rounded-2xl"
+  >
+    <!-- Header -->
+    <div
+      class="shrink-0 border-b border-ink/8 bg-white/95 px-5 py-4 backdrop-blur-md sm:px-7 sm:py-5"
+    >
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-coral">
+            Alumni Association
+          </p>
+          <h2
+            id="contactTitle"
+            class="mt-1 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+          >
+            Elected Committee
+          </h2>
+        </div>
+        <button
+          type="button"
+          id="closeContact"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-mist text-ink/50 transition hover:bg-ink/10 hover:text-ink focus:outline-none focus:ring-2 focus:ring-coral/40"
+          aria-label="Close committee information"
+        >
+          <span class="text-xl leading-none">&times;</span>
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="relative mt-4">
+        <svg
+          class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input
+          type="search"
+          id="committeeSearch"
+          placeholder="Search by name, role, batch…"
+          class="w-full rounded-xl border border-ink/10 bg-mist/60 py-2.5 pl-10 pr-4 text-sm outline-none transition placeholder:text-muted/70 focus:border-coral/40 focus:bg-white focus:ring-2 focus:ring-coral/20"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Filter chips — wraps into multiple rows -->
+      <div id="committeeFilters" class="mt-3 flex flex-wrap gap-2">
+        <!-- chips injected by JS -->
+      </div>
+    </div>
+
+    <!-- Scrollable body -->
+    <div id="contactBody" class="flex-1 overflow-y-auto p-5 sm:p-7">
+      <p class="text-sm text-muted">Loading committee…</p>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@
         {
           "s_no": 1,
           "post": "President",
-          "members": [{ "name": "Prashant V", "batch": "2008" }]
+          "members": [{ "name": "V Prashant Pawar", "batch": "2008" }]
         },
         {
           "s_no": 2,
@@ -33,7 +33,7 @@
           "s_no": 5,
           "post": "Treasurer",
           "members": [
-            { "name": "Soma", "batch": "2009" },
+            { "name": "V Soma", "batch": "2009", "profession": "Assistent Manager in SBI Bank" },
             { "name": "Ganesh E", "batch": "2011" }
           ]
         },
@@ -92,7 +92,7 @@
           "s_no": 13,
           "post": "Discipline & Ethics Committee",
           "members": [
-            { "name": "Madhu Mohan Reddy", "batch": "2007" },
+            { "name": "C Madhu Mohan Reddy", "batch": "2007" },
             { "name": "K Ramesh", "batch": "2008" },
             { "name": "Hariprasad R", "batch": "2010" },
             { "name": "Anil K", "batch": "2011" },
@@ -123,7 +123,7 @@
             { "name": "Vinod K", "batch": "2009", "profession": "Contractor Civil" },
             { "name": "Harish Yadav", "batch": null, "profession": "C.A" },
             { "name": "Vishnu", "batch": null, "profession": "Advocate High Court" },
-            { "name": "B Ramesh", "batch": "2011", "profession": "Deputy Manager, MIDHANI" },
+            { "name": "B Ramesh", "batch": "2011", "profession": "Manager, MIDHANI" },
             { "name": "Vinay", "batch": "2012", "profession": "Cinematography" },
             { "name": "Venkatesh", "batch": "2012", "profession": "Software Engineer" },
             { "name": "M Hanmanthu", "batch": null, "profession": "Indian Army" }
